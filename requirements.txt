@@ -1,0 +1,18 @@
+tensorflow>=2.10.0
+Pillow>=9.0.0
+python-docx>=0.8.11
+albumentations>=1.3.0
+numpy>=1.22.0
+scikit-learn>=1.0.0
+wand>=0.6.10
+matplotlib>=3.5.0
+opencv-python-headless>=4.6.0.66
+
+# Note: The 'wand' package requires ImageMagick to be installed on your system.
+# On Ubuntu/Debian: sudo apt-get install libmagickwand-dev
+# On Windows: Download and install ImageMagick (make sure to check the 'Install C and C++ toolkits' box during installation).
+firebase-admin
+google-cloud-bigquery
+google-cloud-firestore
+pandas
+requests

@@ -1,0 +1,59 @@
+# ========================
+# Service Account Keys (NEVER commit these)
+# ========================
+keys/
+*.json
+!requirements*.json
+
+# ========================
+# Python
+# ========================
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+.Python
+*.so
+.env
+.venv
+venv/
+env/
+pip-log.txt
+
+# ========================
+# ML / Dataset artifacts
+# ========================
+dataset/
+models/
+flutter_assets/
+*.h5
+*.tflite
+*.keras
+val_accuracy.json
+skipped_files.txt
+
+# ========================
+# Large source files (docx with embedded images)
+# ========================
+*.docx
+
+# ========================
+# OS / Editor
+# ========================
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+.vscode/
+.idea/
+
+# ========================
+# Logs & temp
+# ========================
+*.log
+*.tmp
