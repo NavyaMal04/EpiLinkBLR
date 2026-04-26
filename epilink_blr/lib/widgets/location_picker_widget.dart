@@ -49,7 +49,7 @@ class _LocationPickerWidgetState extends State<LocationPickerWidget> {
               padding: const EdgeInsets.all(16.0),
               child: GooglePlaceAutoCompleteTextField(
                 textEditingController: _searchController,
-                googleAPIKey: "AIzaSyB9jptYcoyQLGQysffkYcK5mJFfxINleUg",
+                googleAPIKey: const String.fromEnvironment('GOOGLE_MAPS_API_KEY', defaultValue: 'YOUR_KEY_HERE'),
                 inputDecoration: const InputDecoration(
                   hintText: "Search for a landmark, area, or building",
                   border: OutlineInputBorder(),
