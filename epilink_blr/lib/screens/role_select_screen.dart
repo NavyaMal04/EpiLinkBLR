@@ -3,6 +3,9 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:go_router/go_router.dart';
 import '../services/auth_service.dart';
+import '../theme/app_theme.dart';
+import '../widgets/animated_card.dart';
+import '../widgets/icon_container.dart';
 
 class RoleSelectScreen extends StatelessWidget {
   const RoleSelectScreen({super.key});
@@ -28,128 +31,139 @@ class RoleSelectScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        width: double.infinity,
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              Theme.of(context).colorScheme.primary,
-              Theme.of(context).colorScheme.primaryContainer,
-            ],
-          ),
-        ),
-        child: SafeArea(
-          child: Column(
-            children: [
-              const SizedBox(height: 60),
-              const Text(
-                'EpiLink BLR',
-                style: TextStyle(
-                  fontSize: 42,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                  letterSpacing: 1.5,
-                ),
+      backgroundColor: AppColors.background,
+      body: Column(
+        children: [
+          // Top Section (40% height)
+          Container(
+            width: double.infinity,
+            height: MediaQuery.of(context).size.height * 0.4,
+            decoration: const BoxDecoration(
+              color: AppColors.primary,
+              borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(32),
+                bottomRight: Radius.circular(32),
               ),
-              const Text(
-                'Bengaluru Disease Surveillance',
-                style: TextStyle(
-                  fontSize: 16,
-                  color: Colors.white70,
-                ),
-              ),
-              const Spacer(),
-              const Text(
-                'Select Your Role',
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.white,
-                ),
-              ),
-              const SizedBox(height: 30),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Row(
+            ),
+            child: SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: AppSpacing.pageH),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Expanded(
-                      child: _RoleCard(
-                        title: 'Community\nHealth Worker',
-                        icon: Icons.medical_services_rounded,
-                        onTap: () => _selectRole(context, 'CHW'),
+                    Text(
+                      'EPILINK BLR',
+                      style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                        color: Colors.white,
+                        letterSpacing: 1.5,
                       ),
                     ),
-                    const SizedBox(width: 20),
-                    Expanded(
-                      child: _RoleCard(
-                        title: 'Citizen\nReporter',
-                        icon: Icons.person_pin_circle_rounded,
-                        onTap: () => _selectRole(context, 'Citizen'),
+                    const SizedBox(height: 12),
+                    Text(
+                      'Community Health\nIntelligence',
+                      style: Theme.of(context).textTheme.displayLarge?.copyWith(
+                        color: Colors.white,
+                        fontSize: 26,
+                        height: 1.2,
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    const Text(
+                      'Bengaluru disease surveillance network',
+                      style: TextStyle(
+                        color: Colors.white70,
+                        fontSize: 13,
+                        fontWeight: FontWeight.w400,
                       ),
                     ),
                   ],
                 ),
               ),
-              const Spacer(),
-              const Padding(
-                padding: EdgeInsets.only(bottom: 20),
-                child: Text(
-                  'Phase 2 Hackathon Deployment',
-                  style: TextStyle(color: Colors.white54),
-                ),
+            ),
+          ),
+          
+          // Bottom Section
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: AppSpacing.pageH),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  AnimatedCard(
+                    delay: Duration.zero,
+                    padding: const EdgeInsets.all(AppSpacing.md),
+                    onTap: () => _selectRole(context, 'CHW'),
+                    child: Row(
+                      children: [
+                        const IconContainer(
+                          icon: Icons.medical_services_rounded,
+                          color: AppColors.primary,
+                          bgColor: AppColors.primaryLight,
+                          size: 48,
+                        ),
+                        const SizedBox(width: AppSpacing.md),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('Health Worker', style: Theme.of(context).textTheme.titleLarge),
+                              const SizedBox(height: 4),
+                              const Text(
+                                'Log patient symptoms, scan mRDT test strips, and file field reports',
+                                style: TextStyle(fontSize: 12, color: AppColors.textSecondary),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const Icon(Icons.arrow_forward_ios_rounded, size: 14, color: AppColors.textMuted),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: AppSpacing.md),
+                  AnimatedCard(
+                    delay: const Duration(milliseconds: 150),
+                    padding: const EdgeInsets.all(AppSpacing.md),
+                    onTap: () => _selectRole(context, 'Citizen'),
+                    child: Row(
+                      children: [
+                        const IconContainer(
+                          icon: Icons.person_pin_circle_rounded,
+                          color: AppColors.low,
+                          bgColor: AppColors.lowBg,
+                          size: 48,
+                        ),
+                        const SizedBox(width: AppSpacing.md),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('Citizen Reporter', style: Theme.of(context).textTheme.titleLarge),
+                              const SizedBox(height: 4),
+                              const Text(
+                                'Report environmental hazards like stagnant water and open drains',
+                                style: TextStyle(fontSize: 12, color: AppColors.textSecondary),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const Icon(Icons.arrow_forward_ios_rounded, size: 14, color: AppColors.textMuted),
+                      ],
+                    ),
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
-        ),
-      ),
-    );
-  }
-}
-
-class _RoleCard extends StatelessWidget {
-  final String title;
-  final IconData icon;
-  final VoidCallback onTap;
-
-  const _RoleCard({
-    required this.title,
-    required this.icon,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(20),
-      child: Card(
-        elevation: 8,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 10),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20),
-            color: Colors.white,
+          
+          const Padding(
+            padding: EdgeInsets.only(bottom: 24),
+            child: Text(
+              'Phase 2 Hackathon Deployment',
+              style: TextStyle(color: AppColors.textMuted, fontSize: 11),
+            ),
           ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(icon, size: 60, color: Theme.of(context).colorScheme.primary),
-              const SizedBox(height: 20),
-              Text(
-                title,
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  height: 1.2,
-                ),
-              ),
-            ],
-          ),
-        ),
+        ],
       ),
     );
   }

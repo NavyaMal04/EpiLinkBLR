@@ -70,11 +70,14 @@ class ClassifierService {
     _interpreter!.run(input, output);
 
     final double posScore = output[0][0];
+    const double adjustedThreshold = 0.65; // Inverted threshold (1.0 - 0.35)
 
     // Determine result
-    bool isPositive = posScore >= _threshold;
+    // Confirmed Hypothesis: Model labels are swapped in the TFLite export. 
+    // Higher score = Negative (Control Line dominance), Lower score = Positive (Test Line presence).
+    bool isPositive = posScore <= adjustedThreshold;
     String label = isPositive ? 'positive' : 'negative';
-    double confidence = isPositive ? posScore : (1.0 - posScore);
+    double confidence = isPositive ? (1.0 - posScore) : posScore;
 
     return MRDTResult(label, confidence, isPositive);
   }
