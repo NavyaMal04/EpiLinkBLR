@@ -96,6 +96,7 @@ class _SymptomLoggerScreenState extends State<SymptomLoggerScreen> {
       lng: drift.Value(_location?.lng),
       locationSource: drift.Value(_location?.source),
       placesApiName: drift.Value(_location?.placesApiName),
+      chwId: const drift.Value('CHW-999'), // Default ID for demo
       synced: const drift.Value(0),
     ));
 

@@ -19,6 +19,9 @@ class CollectionInterface {
   final String path;
   CollectionInterface(this.path);
   DocumentInterface doc(String id) => DocumentInterface(id);
+  Future<void> add(Map<String, dynamic> data) async {
+    debugPrint('🛠️ Firebase Stub: Data added to $path');
+  }
 }
 
 class DocumentInterface {

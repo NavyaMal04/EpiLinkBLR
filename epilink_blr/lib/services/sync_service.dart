@@ -47,7 +47,75 @@ class SyncService with ChangeNotifier {
           'lng': report.lng,
           'locationSource': report.locationSource,
           'placesApiName': report.placesApiName,
+          'chwId': report.chwId,
         });
+
+        // Task 1 — Wire email alert to symptom submission
+        debugPrint('🔍 Checking sync report: ${report.id}, result: ${report.testResult}');
+        if (report.testResult?.toLowerCase() == 'positive') {
+          debugPrint('🚨 Positive case detected! Attempting to queue email alert...');
+          try {
+            final firestore = FirestoreInterface.instance;
+            await firestore.collection('mail').add({
+              'to': ['bbmp.healthalerts.mock@gmail.com'],
+              'message': {
+                'subject': '⚠️ EpiLink Alert: Positive ${report.diseaseSuspected} case in ${report.wardName}',
+                'html': '''
+                  <div style="font-family: Arial, sans-serif; max-width: 600px;">
+                    <div style="background: #185FA5; padding: 24px; border-radius: 8px 8px 0 0;">
+                      <h1 style="color: white; margin: 0; font-size: 20px;">
+                        EpiLink BLR — Positive Case Alert
+                      </h1>
+                    </div>
+                    <div style="background: #FEF2F2; border: 1px solid #FECACA;
+                                border-radius: 0 0 8px 8px; padding: 24px;">
+                      <h2 style="color: #991B1B; margin-top: 0;">
+                        ${report.diseaseSuspected} confirmed in ${report.wardName}
+                      </h2>
+                      <table style="width: 100%; border-collapse: collapse;">
+                        <tr>
+                          <td style="padding: 8px 0; color: #64748B;">Ward</td>
+                          <td style="padding: 8px 0; font-weight: bold;">${report.wardName}</td>
+                        </tr>
+                        <tr>
+                          <td style="padding: 8px 0; color: #64748B;">Disease Suspected</td>
+                          <td style="padding: 8px 0; color: #DC2626; font-weight: bold;">
+                            ${report.diseaseSuspected}
+                          </td>
+                        </tr>
+                        <tr>
+                          <td style="padding: 8px 0; color: #64748B;">Test Result</td>
+                          <td style="padding: 8px 0; font-weight: bold;">Positive</td>
+                        </tr>
+                        <tr>
+                          <td style="padding: 8px 0; color: #64748B;">Location</td>
+                          <td style="padding: 8px 0;">${report.wardName} Ward, Bengaluru</td>
+                        </tr>
+                        <tr>
+                          <td style="padding: 8px 0; color: #64748B;">Filed by</td>
+                          <td style="padding: 8px 0;">Community Health Worker · ${report.chwId}</td>
+                        </tr>
+                      </table>
+                      <div style="margin-top: 20px; padding: 16px; background: white;
+                                  border-radius: 8px; border-left: 4px solid #DC2626;">
+                        <strong>Recommended Action:</strong> Deploy fogging units to
+                        ${report.wardName} immediately. Stage medication at local PHC.
+                        Increase CHW survey frequency in surrounding wards.
+                      </div>
+                      <p style="color: #94A3B8; font-size: 12px; margin-top: 20px;">
+                        This alert was generated automatically by EpiLink BLR
+                        disease surveillance system.
+                      </p>
+                    </div>
+                  </div>
+                ''',
+              },
+            });
+            debugPrint('✅ Email alert queued for ${report.wardName} — ${report.diseaseSuspected}');
+          } catch (e) {
+            debugPrint('⚠️ Email alert failed (non-critical): $e');
+          }
+        }
         
         await db.markSymptomReportSynced(report.id);
             
